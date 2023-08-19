@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Healthcare Application</title>
+</head>
+<body>
+    <h1>Patient Information</h1>
+    <form id="patientForm">
+        <label for="patientName">Name:</label>
+        <input type="text" id="patientName" name="patientName"><br><br>
+        
+        <label for="patientAge">Age:</label>
+        <input type="number" id="patientAge" name="patientAge"><br><br>
+        
+        <label for="patientGender">Gender:</label>
+        <select id="patientGender" name="patientGender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+        </select><br><br>
+        
+        <button type="button" id="submitBtn">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById("submitBtn").addEventListener("click", function() {
+            const name = document.getElementById("patientName").value;
+            const age = document.getElementById("patientAge").value;
+            const gender = document.getElementById("patientGender").value;
+            
+            const patientData = {
+                name: name,
+                age: age,
+                gender: gender
+            };
+            
+            const xmlString = createXML(patientData);
+            saveToFile(xmlString);
+        });
+        
+        function createXML(data) {
+            const xml = `<?xml version="1.0" encoding="UTF-8"?>
+            <patientData>
+                <name>${data.name}</name>
+                <age>${data.age}</age>
+                <gender>${data.gender}</gender>
+            </patientData>`;
+            
+            return xml;
+        }
+        
+        function saveToFile(data) {
+            const blob = new Blob([data], { type: "text/xml" });
+            const a = document.createElement("a");
+            a.download = "patient_data.xml";
+            a.href = window.URL.createObjectURL(blob);
+            a.style.display = "none";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+</body>
+</html>
